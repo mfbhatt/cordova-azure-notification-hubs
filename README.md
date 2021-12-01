@@ -1,4 +1,4 @@
-# ordova-azure-notification-hubs
+# cordova-azure-notification-hubs
 
 Register and receive push notifications with Azure Notification Hubs.
 
