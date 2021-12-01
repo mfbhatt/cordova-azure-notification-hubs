@@ -1,4 +1,4 @@
-# cordova-azure-notification-hubs
+# @mfbhatt/cordova-azure-notification-hubs
 
 Register and receive push notifications with Azure Notification Hubs.
 
@@ -10,7 +10,7 @@ Check the api on https://github.com/phonegap/phonegap-plugin-push
 To install from the command line:
 
 ```
-cordova plugin add cordova-azure-notification-hubs
+cordova plugin add @mfbhatt/cordova-azure-notification-hubs
 ```
 
 Download your Firebase project's `google-services.json` file to the Cordova project's `platforms/android/` folder.
