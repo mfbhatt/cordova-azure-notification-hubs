@@ -1,14 +1,14 @@
 {
   "name": "cordova-azure-notification-hubs",
   "description": "Register and receive push notifications with Azure Notification Hubs.",
-  "version": "1.0.6",
-  "homepage": "https://github.com/derek82511/cordova-azure-notification-hubs",
+  "version": "0.0.1",
+  "homepage": "https://github.com/mfbhatt/cordova-azure-notification-hubs",
   "repository": {
     "type": "git",
-    "url": "git://github.com/derek82511/cordova-azure-notification-hubs.git"
+    "url": "https://github.com/mfbhatt/cordova-azure-notification-hubs.git"
   },
   "bugs": {
-    "url": "https://github.com/derek82511/cordova-azure-notification-hubs/issues"
+    "url": "https://github.com/mfbhatt/cordova-azure-notification-hubs/issues"
   },
   "cordova": {
     "id": "cordova-azure-notification-hubs",
@@ -28,13 +28,13 @@
   ],
   "engines": {
     "cordovaDependencies": {
-      "1.0.6": {
+      "0.0.1": {
         "cordova-ios": ">=4.5.0",
         "cordova-android": ">=7.1.0",
         "cordova": ">=7.1.0"
       }
     }
   },
-  "author": "Chang, Cheng-Yi",
+  "author": "Mohmmad Farooq",
   "license": "MIT"
 }
