@@ -1,4 +1,4 @@
-# @mfbhatt/cordova-azure-notification-hubs
+# ordova-azure-notification-hubs
 
 Register and receive push notifications with Azure Notification Hubs.
 
