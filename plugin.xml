@@ -1,140 +1,95 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<!--
-Cordova Azure Notification Hubs Plugin Configuration
-
-This plugin integrates Azure Notification Hubs with Apache Cordova applications,
-enabling push notification capabilities for mobile platforms.
-
-
-Purpose:
-        - Provides cross-platform push notification support using Azure Notification Hubs
-        - Handles registration, notification delivery, and lifecycle management
-        - Supports iOS and Android platforms
-
-Key Responsibilities:
-        - Defines plugin metadata and configuration
-        - Specifies native platform dependencies
-        - Maps Cordova JavaScript APIs to native implementations
-        - Manages plugin installation and initialization
-
-Dependencies:
-        - Azure Notification Hubs SDK
-        - Cordova core plugins
-        - Platform-specific notification services (APNs, GCM/FCM)
-
-Configuration:
-        Namespace: http://www.phonegap.com/ns/plugins/1.0
-        This follows the PhoneGap plugin specification standard
--->
-<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:amazon="http://schemas.android.com/apk/lib/com.amazon.device.ads"
-        xmlns:rim="http://www.blackberry.com/ns/widgets"
         id="pm-cordova-azure-notification-hubs"
-        version="1.0.2">
-<name>CordovaAzureNotificationHubs</name>
-<description>
-		This plugin allows you register and receive push notifications via Azure Notification Hub.
-	</description>
-<license>MIT</license>
-<js-module src="www/push.js"
-           name="PushNotification">
-<clobbers target="PushNotification" />
-</js-module>
-<engines>
-<engine name="cordova"
-        version="&gt;=7.1.0" />
-<engine name="cordova-android"
-        version="&gt;=7.1.0" />
-<engine name="cordova-ios"
-        version="&gt;=4.5.0" />
-</engines>
-<platform name="android">
-<config-file target="res/xml/config.xml"
-             parent="/*">
-<feature name="PushNotification">
-<param name="android-package"
-       value="com.adobe.phonegap.push.PushPlugin" />
-</feature>
-</config-file>
-<config-file target="AndroidManifest.xml"
-             parent="/manifest">
-<uses-permission android:name="android.permission.INTERNET" />
-<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-<uses-permission android:name="android.permission.WAKE_LOCK" />
-<uses-permission android:name="android.permission.VIBRATE" />
-</config-file>
-<config-file target="AndroidManifest.xml"
-             parent="/manifest/application">
-<activity android:name="com.adobe.phonegap.push.PushHandlerActivity"
-          android:exported="true"
-          android:permission="${applicationId}.permission.PushHandlerActivity" />
-<receiver android:name="com.adobe.phonegap.push.BackgroundActionButtonHandler" />
-<service android:name="com.adobe.phonegap.push.FCMService">
-<intent-filter>
-<action android:name="com.google.firebase.MESSAGING_EVENT" />
-</intent-filter>
-</service>
-<service android:name="com.adobe.phonegap.push.PushInstanceIDListenerService">
-<intent-filter>
-<action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-</intent-filter>
-</service>
-</config-file>
-<framework src="com.android.support:support-v13:27.+" />
-<framework src="me.leolin:ShortcutBadger:1.1.21@aar" />
-<framework src="com.google.firebase:firebase-messaging:17.0.+" />
-<dependency id="cordova-support-google-services"
-            version="~1.4.0" />
-<dependency id="phonegap-plugin-multidex"
-            version="~1.0.0" />
-<source-file src="src/android/com/adobe/phonegap/push/FCMService.java"
-             target-dir="src/com/adobe/phonegap/push/" />
-<source-file src="src/android/com/adobe/phonegap/push/PushConstants.java"
-             target-dir="src/com/adobe/phonegap/push/" />
-<source-file src="src/android/com/adobe/phonegap/push/PushHandlerActivity.java"
-             target-dir="src/com/adobe/phonegap/push/" />
-<source-file src="src/android/com/adobe/phonegap/push/PushInstanceIDListenerService.java"
-             target-dir="src/com/adobe/phonegap/push/" />
-<source-file src="src/android/com/adobe/phonegap/push/PushPlugin.java"
-             target-dir="src/com/adobe/phonegap/push/" />
-<source-file src="src/android/com/adobe/phonegap/push/PermissionUtils.java"
-             target-dir="src/com/adobe/phonegap/push/" />
-<source-file src="src/android/com/adobe/phonegap/push/BackgroundActionButtonHandler.java"
-             target-dir="src/com/adobe/phonegap/push/" />
-<lib-file src="src/android/notification-hubs-android-sdk-0.4.jar" />
-</platform>
-<platform name="ios">
-<config-file target="config.xml"
-             parent="/*">
-<feature name="PushNotification">
-<param name="ios-package"
-       value="PushPlugin" />
-</feature>
-</config-file>
-<config-file target="*-Info.plist"
-             parent="UIBackgroundModes">
-<array>
-<string>remote-notification</string>
-</array>
-</config-file>
-<config-file target="*-Debug.plist"
-             parent="aps-environment">
-<string>development</string>
-</config-file>
-<config-file target="*-Release.plist"
-             parent="aps-environment">
-<string>production</string>
-</config-file>
-<source-file src="src/ios/AppDelegate+notification.m" />
-<source-file src="src/ios/PushPlugin.m" />
-<header-file src="src/ios/AppDelegate+notification.h" />
-<header-file src="src/ios/PushPlugin.h" />
-<framework src="src/ios/WindowsAzureMessaging.framework"
-           custom="true" />
-<podspec>
-<pod name="Azure/azure-notificationhubs-ios"
-     spec="~&gt; 3.1.4" />
-</podspec>
-</platform>
+        version="2.0.0">
+
+    <name>CordovaAzureNotificationHubs</name>
+    <description>Modernized Azure Notification Hubs plugin (AndroidX compatible)</description>
+    <license>MIT</license>
+
+    <js-module src="www/push.js" name="PushNotification">
+        <clobbers target="PushNotification" />
+    </js-module>
+
+    <engines>
+        <engine name="cordova-android" version=">=12.0.0" />
+    </engines>
+
+    <platform name="android">
+
+        <!-- Register plugin -->
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="PushNotification">
+                <param name="android-package"
+                       value="com.adobe.phonegap.push.PushPlugin" />
+            </feature>
+        </config-file>
+
+        <!-- Permissions -->
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+            <uses-permission android:name="android.permission.INTERNET" />
+            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+            <uses-permission android:name="android.permission.WAKE_LOCK" />
+            <uses-permission android:name="android.permission.VIBRATE" />
+            <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+        </config-file>
+
+        <!-- Application components -->
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+
+            <activity
+                android:name="com.adobe.phonegap.push.PushHandlerActivity"
+                android:exported="true"
+                android:permission="${applicationId}.permission.PushHandlerActivity" />
+
+            <receiver
+                android:name="com.adobe.phonegap.push.BackgroundActionButtonHandler"
+                android:exported="false" />
+
+            <!-- Modern FCM Service -->
+            <service
+                android:name="com.adobe.phonegap.push.FCMService"
+                android:exported="false">
+                <intent-filter>
+                    <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                </intent-filter>
+            </service>
+
+        </config-file>
+
+        <!-- AndroidX Dependencies -->
+        <framework src="androidx.core:core:1.12.0" />
+        <framework src="androidx.appcompat:appcompat:1.6.1" />
+
+        <!-- Modern Firebase -->
+        <framework src="com.google.firebase:firebase-messaging:23.4.1" />
+
+        <!-- ShortcutBadger (kept if needed) -->
+        <framework src="me.leolin:ShortcutBadger:1.1.21@aar" />
+
+        <!-- Java Source Files -->
+        <source-file src="src/android/com/adobe/phonegap/push/FCMService.java"
+                     target-dir="app/src/main/java/com/adobe/phonegap/push/" />
+
+        <source-file src="src/android/com/adobe/phonegap/push/PushConstants.java"
+                     target-dir="app/src/main/java/com/adobe/phonegap/push/" />
+
+        <source-file src="src/android/com/adobe/phonegap/push/PushHandlerActivity.java"
+                     target-dir="app/src/main/java/com/adobe/phonegap/push/" />
+
+        <source-file src="src/android/com/adobe/phonegap/push/PushPlugin.java"
+                     target-dir="app/src/main/java/com/adobe/phonegap/push/" />
+
+        <source-file src="src/android/com/adobe/phonegap/push/PermissionUtils.java"
+                     target-dir="app/src/main/java/com/adobe/phonegap/push/" />
+
+        <source-file src="src/android/com/adobe/phonegap/push/BackgroundActionButtonHandler.java"
+                     target-dir="app/src/main/java/com/adobe/phonegap/push/" />
+
+        <!-- Azure SDK JAR -->
+        <lib-file src="src/android/notification-hubs-android-sdk-0.4.jar" />
+
+    </platform>
+
 </plugin>
