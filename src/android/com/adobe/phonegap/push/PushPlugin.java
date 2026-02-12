@@ -11,11 +11,12 @@ import android.media.AudioAttributes;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import androidx.core.app.NotificationCompat;
 
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;
@@ -201,47 +202,48 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
 
                         Log.v(LOG_TAG, "execute: senderID=" + senderID);
 
-                        token = FirebaseInstanceId.getInstance().getToken();
+                        FirebaseMessaging.getInstance().getToken()
+                        .addOnCompleteListener(new OnCompleteListener<String>() {
+                            @Override
+                            public void onComplete(Task<String> task) {
+                                if (!task.isSuccessful()) {
+                                    callbackContext.error("Failed to get FCM token");
+                                    return;
+                                }
 
-                        if (token == null) {
-                            token = FirebaseInstanceId.getInstance().getToken(senderID,FCM);
-                        }
+                                String token = task.getResult();
 
-                        if (!"".equals(token)) {
-                            SharedPreferences.Editor editor = sharedPref.edit();
-                            
-                            if (((regId=sharedPref.getString(AZURE_REG_ID, null)) == null)){
-                                NotificationHub hub = new NotificationHub(notificationHubPath, connectionString, getApplicationContext());
+                                if (token == null || token.isEmpty()) {
+                                    callbackContext.error("Empty registration ID received from FCM");
+                                    return;
+                                }
 
-                                regId = hub.register(token).getRegistrationId();
+                                try {
+                                    SharedPreferences.Editor editor = sharedPref.edit();
+                                    String regId = sharedPref.getString(AZURE_REG_ID, null);
+                                    String storedToken = sharedPref.getString(REGISTRATION_ID, "");
 
-                                editor.putString(AZURE_REG_ID, regId);
-                                editor.putString(REGISTRATION_ID, token);
-                                editor.commit();
-                            } else if ((storedToken=sharedPref.getString(REGISTRATION_ID, "")) != token) {
-                                NotificationHub hub = new NotificationHub(notificationHubPath, connectionString, getApplicationContext());
+                                    NotificationHub hub = new NotificationHub(notificationHubPath, connectionString, getApplicationContext());
 
-                                regId = hub.register(token).getRegistrationId();
+                                    if (regId == null || !token.equals(storedToken)) {
+                                        regId = hub.register(token).getRegistrationId();
+                                        editor.putString(AZURE_REG_ID, regId);
+                                        editor.putString(REGISTRATION_ID, token);
+                                        editor.apply();
+                                    }
 
-                                editor.putString(AZURE_REG_ID, regId);
-                                editor.putString(REGISTRATION_ID, token);
-                                editor.commit();
-                            } else {
-                                callbackContext.error("Empty registration ID received from Azure");
-                                return;
+                                    JSONObject json = new JSONObject();
+                                    json.put(AZURE_REG_ID, regId);
+                                    json.put(REGISTRATION_ID, token);
+
+                                    PushPlugin.sendEvent(json);
+
+                                } catch (Exception e) {
+                                    callbackContext.error(e.getMessage());
+                                }
                             }
+                        });
 
-                            JSONObject json = new JSONObject();
-                            json.put(AZURE_REG_ID, regId);
-                            json.put(REGISTRATION_ID, token);
-
-                            Log.v(LOG_TAG, "onRegistered: " + json.toString());
-
-                            PushPlugin.sendEvent( json );
-                        } else {
-                            callbackContext.error("Empty registration ID received from FCM");
-                            return;
-                        }
                     } catch (JSONException e) {
                         Log.e(LOG_TAG, "execute: Got JSON Exception " + e.getMessage());
                         callbackContext.error(e.getMessage());
@@ -309,7 +311,13 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
                         editor.remove(REGISTRATION_ID);
                         editor.commit();
                         
-                        FirebaseInstanceId.getInstance().deleteInstanceId();
+                        FirebaseMessaging.getInstance().deleteToken()
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                Log.v(LOG_TAG, "FCM token deleted.");
+                            }
+                        });
+
                         Log.v(LOG_TAG, "UNREGISTER");
 
                         // Remove shared prefs
