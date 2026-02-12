@@ -247,9 +247,6 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
                     } catch (JSONException e) {
                         Log.e(LOG_TAG, "execute: Got JSON Exception " + e.getMessage());
                         callbackContext.error(e.getMessage());
-                    } catch (IOException e) {
-                        Log.e(LOG_TAG, "execute: Got IO Exception " + e.getMessage());
-                        callbackContext.error(e.getMessage());
                     } catch (Exception e) {
                         Log.e(LOG_TAG, "execute: Got General Exception " + e.getMessage());
                         callbackContext.error(e.getMessage());
@@ -330,10 +327,7 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
                         editor.commit();
 
                         callbackContext.success();
-                    } catch (IOException e) {
-                        Log.e(LOG_TAG, "execute: Got JSON Exception " + e.getMessage());
-                        callbackContext.error(e.getMessage());
-                    } catch (Exception e) {
+                    }  catch (Exception e) {
                         Log.e(LOG_TAG, "execute: Got General Exception " + e.getMessage());
                         callbackContext.error(e.getMessage());
                     }
