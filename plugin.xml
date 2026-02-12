@@ -1,4 +1,31 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+Cordova Azure Notification Hubs Plugin Configuration
+
+This plugin integrates Azure Notification Hubs with Apache Cordova applications,
+enabling push notification capabilities for mobile platforms.
+
+
+Purpose:
+        - Provides cross-platform push notification support using Azure Notification Hubs
+        - Handles registration, notification delivery, and lifecycle management
+        - Supports iOS and Android platforms
+
+Key Responsibilities:
+        - Defines plugin metadata and configuration
+        - Specifies native platform dependencies
+        - Maps Cordova JavaScript APIs to native implementations
+        - Manages plugin installation and initialization
+
+Dependencies:
+        - Azure Notification Hubs SDK
+        - Cordova core plugins
+        - Platform-specific notification services (APNs, GCM/FCM)
+
+Configuration:
+        Namespace: http://www.phonegap.com/ns/plugins/1.0
+        This follows the PhoneGap plugin specification standard
+-->
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:amazon="http://schemas.android.com/apk/lib/com.amazon.device.ads"
@@ -58,7 +85,7 @@
 <framework src="me.leolin:ShortcutBadger:1.1.21@aar" />
 <framework src="com.google.firebase:firebase-messaging:17.0.+" />
 <dependency id="cordova-support-google-services"
-            version="~1.2.0" />
+            version="~1.4.0" />
 <dependency id="phonegap-plugin-multidex"
             version="~1.0.0" />
 <source-file src="src/android/com/adobe/phonegap/push/FCMService.java"
